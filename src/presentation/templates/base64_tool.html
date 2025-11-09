@@ -1,0 +1,468 @@
+{% extends "base.html" %} {% block title %}{{ context.seo.title }}{% endblock %}
+{% block description %}{{ context.seo.description }}{% endblock %} {% block
+keywords %}{{ context.seo.keywords }}{% endblock %} {% block canonical %}{{
+context.seo.canonical_url }}{% endblock %} {% block og_title %}{{
+context.seo.og_title }}{% endblock %} {% block og_description %}{{
+context.seo.og_description }}{% endblock %} {% block twitter_title %}{{
+context.seo.og_title }}{% endblock %} {% block twitter_description %}{{
+context.seo.og_description }}{% endblock %} {% block content %} {# Définir des
+variables pour simplifier le template #} {% set current_charset =
+context.charset %} {% set current_path = request.url.path %}
+
+<div class="content-header">
+  <h1 id="main-heading">{{ context.seo.og_title }}</h1>
+  <p class="subtitle">{{ context.seo.description }}</p>
+</div>
+
+<!-- Indicateur visuel de l'outil actif -->
+<div class="tool-indicator">
+  <span class="tool-badge">Base64</span>
+  <span class="tool-action">
+    {% if current_path == '/encode' %} Encoder {% elif current_path == '/decode'
+    %} Décoder {% else %} Outils {% endif %}
+  </span>
+</div>
+
+<!-- Section unique selon la page -->
+{% if current_path == '/' %}
+<!-- Page d'accueil avec les deux outils -->
+<div class="tools-grid">
+  <section aria-labelledby="decode-heading" class="tool-card">
+    <div class="card-header">
+      <h2 id="decode-heading">🔤 Décoder le Base64</h2>
+      <p>Convertir une chaîne Base64 en texte lisible</p>
+    </div>
+    <form method="post" action="/decode" role="form">
+      <label for="base64_text">Texte Base64 à décoder :</label>
+      <textarea
+        id="base64_text"
+        name="base64_text"
+        aria-describedby="decode-help"
+        placeholder="Pastez votre chaîne Base64 ici"
+        required
+      >
+{{ context.original_base64 }}</textarea
+      >
+      <small id="decode-help"
+        >Collez votre texte encodé en Base64 pour le décoder</small
+      >
+
+      <label for="charset_decode">Encodage des caractères :</label>
+      <select id="charset_decode" name="character_set" class="encoding-select">
+        {% for category in context.encoding_categories %} {% if category.name ==
+        "AUTO-DETECT" %} {% for encoding_value, encoding_label in
+        category.encodings %}
+        <option
+          value="{{ encoding_value }}"
+          {%
+          if
+          current_charset=""
+          ="encoding_value"
+          %}selected{%
+          endif
+          %}
+        >
+          {{ encoding_label }}
+        </option>
+        {% endfor %} {% else %}
+        <optgroup label="{{ category.name }}">
+          {% for encoding_value, encoding_label in category.encodings %}
+          <option
+            value="{{ encoding_value }}"
+            {%
+            if
+            current_charset=""
+            ="encoding_value"
+            %}selected{%
+            endif
+            %}
+          >
+            {{ encoding_label }}
+          </option>
+          {% endfor %}
+        </optgroup>
+        {% endif %} {% endfor %}
+      </select>
+
+      <button type="submit" aria-label="Décoder le texte Base64">
+        Décoder
+      </button>
+    </form>
+
+    <div class="tool-actions">
+      <button
+        type="button"
+        class="btn-clear"
+        onclick="clearAllFields()"
+        aria-label="Effacer tous les champs"
+      >
+        🧹 Effacer tout
+      </button>
+      <small>Raccourci: Ctrl + K</small>
+    </div>
+
+    {% if context.decoded_result %}
+    <div class="result" role="status">
+      <h3>Résultat décodé :</h3>
+      <pre><code>{{ context.decoded_result }}</code></pre>
+    </div>
+    {% endif %} {% if context.decode_error %}
+    <div class="error" role="alert">{{ context.decode_error }}</div>
+    {% endif %}
+  </section>
+
+  <section aria-labelledby="encode-heading" class="tool-card">
+    <div class="card-header">
+      <h2 id="encode-heading">📝 Encoder en Base64</h2>
+      <p>Convertir du texte en format Base64</p>
+    </div>
+    <form method="post" action="/encode" role="form">
+      <label for="plain_text">Texte à encoder :</label>
+      <textarea
+        id="plain_text"
+        name="plain_text"
+        aria-describedby="encode-help"
+        placeholder="Entrez le texte à encoder en Base64"
+        required
+      >
+{{ context.original_text }}</textarea
+      >
+      <small id="encode-help"
+        >Saisissez le texte que vous souhaitez convertir en Base64</small
+      >
+
+      <label for="charset_encode">Encodage des caractères :</label>
+      <select id="charset_encode" name="character_set" class="encoding-select">
+        {% for category in context.encoding_categories %} {% if category.name ==
+        "AUTO-DETECT" %} {% for encoding_value, encoding_label in
+        category.encodings %}
+        <option
+          value="{{ encoding_value }}"
+          {%
+          if
+          current_charset=""
+          ="encoding_value"
+          %}selected{%
+          endif
+          %}
+        >
+          {{ encoding_label }}
+        </option>
+        {% endfor %} {% else %}
+        <optgroup label="{{ category.name }}">
+          {% for encoding_value, encoding_label in category.encodings %}
+          <option
+            value="{{ encoding_value }}"
+            {%
+            if
+            current_charset=""
+            ="encoding_value"
+            %}selected{%
+            endif
+            %}
+          >
+            {{ encoding_label }}
+          </option>
+          {% endfor %}
+        </optgroup>
+        {% endif %} {% endfor %}
+      </select>
+
+      <button type="submit" aria-label="Encoder le texte en Base64">
+        Encoder
+      </button>
+    </form>
+
+    <div class="tool-actions">
+      <button
+        type="button"
+        class="btn-clear"
+        onclick="clearAllFields()"
+        aria-label="Effacer tous les champs"
+      >
+        🧹 Effacer tout
+      </button>
+      <small>Raccourci: Ctrl + K</small>
+    </div>
+
+    {% if context.encoded_result %}
+    <div class="result" role="status">
+      <h3>Résultat encodé :</h3>
+      <pre><code>{{ context.encoded_result }}</code></pre>
+    </div>
+    {% endif %} {% if context.encode_error %}
+    <div class="error" role="alert">{{ context.encode_error }}</div>
+    {% endif %}
+  </section>
+</div>
+
+{% elif current_path == '/encode' %}
+<!-- Page d'encodage seule -->
+<section aria-labelledby="encode-heading" class="tool-single">
+  <div class="tool-header">
+    <h2 id="encode-heading">📝 Encoder en Base64</h2>
+    <p>
+      Convertir du texte en format Base64 pour l'intégration dans des URLs,
+      emails, ou données texte.
+    </p>
+  </div>
+
+  <form method="post" action="/encode" role="form" class="single-form">
+    <div class="form-group">
+      <label for="plain_text">Texte à encoder :</label>
+      <textarea
+        id="plain_text"
+        name="plain_text"
+        aria-describedby="encode-help"
+        placeholder="Entrez le texte à encoder en Base64..."
+        required
+      >
+{{ context.original_text }}</textarea
+      >
+      <small id="encode-help"
+        >Saisissez le texte que vous souhaitez convertir en Base64. Supporte
+        tous les caractères UTF-8.</small
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="charset_encode">Encodage des caractères :</label>
+      <select id="charset_encode" name="character_set" class="encoding-select">
+        {% for category in context.encoding_categories %} {% if category.name ==
+        "AUTO-DETECT" %} {% for encoding_value, encoding_label in
+        category.encodings %}
+        <option
+          value="{{ encoding_value }}"
+          {%
+          if
+          current_charset=""
+          ="encoding_value"
+          %}selected{%
+          endif
+          %}
+        >
+          {{ encoding_label }}
+        </option>
+        {% endfor %} {% else %}
+        <optgroup label="{{ category.name }}">
+          {% for encoding_value, encoding_label in category.encodings %}
+          <option
+            value="{{ encoding_value }}"
+            {%
+            if
+            current_charset=""
+            ="encoding_value"
+            %}selected{%
+            endif
+            %}
+          >
+            {{ encoding_label }}
+          </option>
+          {% endfor %}
+        </optgroup>
+        {% endif %} {% endfor %}
+      </select>
+    </div>
+
+    <button
+      type="submit"
+      class="btn-primary"
+      aria-label="Encoder le texte en Base64"
+    >
+      🔤 Encoder en Base64
+    </button>
+  </form>
+
+  <div class="tool-actions">
+    <button
+      type="button"
+      class="btn-clear"
+      onclick="clearAllFields()"
+      aria-label="Effacer tous les champs"
+    >
+      🧹 Effacer tout
+    </button>
+    <small>Raccourci: Ctrl + K</small>
+  </div>
+
+  {% if context.encoded_result %}
+  <div class="result" role="status">
+    <h3>Résultat encodé :</h3>
+    <div class="result-content">
+      <pre><code>{{ context.encoded_result }}</code></pre>
+      <button
+        class="btn-copy"
+        onclick="copyToClipboard({{ context.encoded_result | tojson }}, this)"
+        aria-label="Copier le résultat"
+      >
+        📋 Copier
+      </button>
+    </div>
+  </div>
+  {% endif %} {% if context.encode_error %}
+  <div class="error" role="alert">
+    <strong>Erreur :</strong> {{ context.encode_error }}
+  </div>
+  {% endif %}
+</section>
+
+{% elif current_path == '/decode' %}
+<!-- Page de décodage seule -->
+<section aria-labelledby="decode-heading" class="tool-single">
+  <div class="tool-header">
+    <h2 id="decode-heading">🔤 Décoder le Base64</h2>
+    <p>Convertir une chaîne Base64 en texte lisible original.</p>
+  </div>
+
+  <form method="post" action="/decode" role="form" class="single-form">
+    <div class="form-group">
+      <label for="base64_text">Texte Base64 à décoder :</label>
+      <textarea
+        id="base64_text"
+        name="base64_text"
+        aria-describedby="decode-help"
+        placeholder="Pastez votre chaîne Base64 ici..."
+        required
+      >
+{{ context.original_base64 }}</textarea
+      >
+      <small id="decode-help"
+        >Collez votre texte encodé en Base64 pour le décoder. Doit être un
+        Base64 valide.</small
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="charset_decode">Encodage des caractères :</label>
+      <select id="charset_decode" name="character_set" class="encoding-select">
+        {% for category in context.encoding_categories %} {% if category.name ==
+        "AUTO-DETECT" %} {% for encoding_value, encoding_label in
+        category.encodings %}
+        <option
+          value="{{ encoding_value }}"
+          {%
+          if
+          current_charset=""
+          ="encoding_value"
+          %}selected{%
+          endif
+          %}
+        >
+          {{ encoding_label }}
+        </option>
+        {% endfor %} {% else %}
+        <optgroup label="{{ category.name }}">
+          {% for encoding_value, encoding_label in category.encodings %}
+          <option
+            value="{{ encoding_value }}"
+            {%
+            if
+            current_charset=""
+            ="encoding_value"
+            %}selected{%
+            endif
+            %}
+          >
+            {{ encoding_label }}
+          </option>
+          {% endfor %}
+        </optgroup>
+        {% endif %} {% endfor %}
+      </select>
+    </div>
+
+    <button
+      type="submit"
+      class="btn-primary"
+      aria-label="Décoder le texte Base64"
+    >
+      📝 Décoder le Base64
+    </button>
+  </form>
+
+  <div class="tool-actions">
+    <button
+      type="button"
+      class="btn-clear"
+      onclick="clearAllFields()"
+      aria-label="Effacer tous les champs"
+    >
+      🧹 Effacer tout
+    </button>
+    <small>Raccourci: Ctrl + K</small>
+  </div>
+
+  {% if context.decoded_result %}
+  <div class="result" role="status">
+    <h3>Résultat décodé :</h3>
+    <div class="result-content">
+      <pre><code>{{ context.decoded_result }}</code></pre>
+      <button
+        class="btn-copy"
+        onclick="copyToClipboard({{ context.decoded_result | tojson }}, this)"
+        aria-label="Copier le résultat"
+      >
+        📋 Copier
+      </button>
+    </div>
+  </div>
+  {% endif %} {% if context.decode_error %}
+  <div class="error" role="alert">
+    <strong>Erreur :</strong> {{ context.decode_error }}
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+
+<!-- Section FAQ pour le SEO -->
+<section aria-labelledby="faq-heading" class="faq-section">
+  <h2 id="faq-heading">FAQ Base64 - Encodages Supportés</h2>
+
+  <article itemscope itemtype="https://schema.org/Question">
+    <h3 itemprop="name">Qu'est-ce que l'auto-détection d'encodage ?</h3>
+    <div
+      itemprop="suggestedAnswer"
+      itemscope
+      itemtype="https://schema.org/Answer"
+    >
+      <p itemprop="text">
+        L'auto-détection analyse automatiquement votre texte Base64 pour
+        identifier l'encodage original utilisé. Cette fonctionnalité utilise des
+        algorithmes avancés pour déterminer l'encodage le plus probable avec un
+        niveau de confiance élevé.
+      </p>
+    </div>
+  </article>
+
+  <article itemscope itemtype="https://schema.org/Question">
+    <h3 itemprop="name">Quels encodages sont supportés ?</h3>
+    <div
+      itemprop="suggestedAnswer"
+      itemscope
+      itemtype="https://schema.org/Answer"
+    >
+      <p itemprop="text">
+        Notre outil supporte plus de 30 encodages différents incluant UTF-8,
+        ASCII, Latin-1, Windows-1252, UTF-16, ainsi que des encodages
+        spécifiques aux langues comme le Japonais (Shift JIS, EUC-JP), le
+        Chinois (GB2312, Big5), le Russe (KOI8-R), et bien d'autres.
+      </p>
+    </div>
+  </article>
+
+  <article itemscope itemtype="https://schema.org/Question">
+    <h3 itemprop="name">Quand utiliser l'auto-détection ?</h3>
+    <div
+      itemprop="suggestedAnswer"
+      itemscope
+      itemtype="https://schema.org/Answer"
+    >
+      <p itemprop="text">
+        Utilisez l'auto-détection quand vous ne connaissez pas l'encodage
+        original du texte Base64. C'est particulièrement utile pour décoder des
+        données provenant de sources inconnues ou de systèmes hérités.
+      </p>
+    </div>
+  </article>
+</section>
+{% endblock %}

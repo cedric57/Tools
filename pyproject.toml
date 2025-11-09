@@ -1,0 +1,193 @@
+[project]
+name = "tools"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "chardet>=5.2.0",
+    "defusedxml>=0.7.1",
+    "fastapi>=0.121.0",
+    "jinja2>=3.1.6",
+    "python-dotenv>=1.2.1",
+    "python-multipart>=0.0.20",
+    "uvicorn>=0.38.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]
+
+# ---------------------------------------------------------------------------- #
+#                             ruff formatter/linter                            #
+# ---------------------------------------------------------------------------- #
+
+# ----------------------------- ruff global config ----------------------------- #
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]  # Liste des dossiers/fichiers à exclure de l'analyse.
+line-length = 120  # Longueur maximale des lignes de code.
+
+
+# ----------------------------- Linting Config ------------------------------- #
+
+[tool.ruff.lint]
+preview = true  # Active les règles expérimentales.
+select = [
+    "E", "W",  # pycodestyle (erreurs de style).
+    "F",       # Pyflakes (erreurs de syntaxe).
+    "UP",      # pyupgrade (modernisation du code).
+    "B",       # flake8-bugbear (erreurs subtiles).
+    "SIM",     # flake8-simplify (simplification du code).
+    "I"        # isort (tri des imports).
+]  # Règles activées pour l'analyse.
+ignore = []  # Règles à ignorer (aucune ici).
+fixable = ["ALL"]  # Autorise la correction automatique de tous les problèmes fixables.
+
+# ----------------------------- Formatting Config ---------------------------- #
+
+[tool.ruff.format]
+preview = true  # Active les fonctionnalités expérimentales de formatage.
+quote-style = "double"  # Comme Black, utilise des guillemets doubles pour les chaînes de caractères
+indent-style = "space"  # Comme Black, indente avec des espaces au lieu de tabulations.
+skip-magic-trailing-comma = false  # Comme Black, respecte les virgules magiques.
+line-ending = "auto"  # Comme Black, détecte automatiquement le type de fin de ligne.
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false  # Désactive le formatage des exemples de code dans les docstrings.
+
+# Set the line length limit used when formatting code snippets in docstrings.
+# This only has an effect when the `docstring-code-format` setting is enabled.
+docstring-code-line-length = "dynamic"  # Longueur de ligne dynamique pour les exemples de code.
+
+# ----------------------------- ISort Config --------------------------------- #
+
+[tool.ruff.lint.isort]
+order-by-type = true  # Trie les imports par type (standards, tiers, locaux).
+relative-imports-order = "closest-to-furthest"  # Trie les imports relatifs par proximité.
+extra-standard-library = ["typing"]  # Ajoute des modules standards supplémentaires.
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = []  # Modules internes au projet.
+
+# ----------------------------- Pydocstyle Config ---------------------------- #
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"  # Convention de style pour les docstrings.
+
+# ---------------------------------------------------------------------------- #
+#                                   MyPy                                       #
+# ---------------------------------------------------------------------------- #
+
+[tool.mypy]
+python_version = "3.12"  # Version de Python utilisée pour l'analyse.
+warn_return_any = true  # Avertissements pour les fonctions retournant `Any`.
+warn_unused_configs = true  # Avertissements pour les configurations inutilisées.
+disallow_untyped_defs = true  # Interdit les définitions non typées.
+check_untyped_defs = true  # Vérifie les définitions non typées.
+ignore_missing_imports = false  # Affiche des erreurs pour les imports manquants.
+strict = true  # Active toutes les vérifications strictes.
+#mypy_path = "src"  # Chemin vers les sources à analyser.
+
+# ---------------------------------------------------------------------------- #
+#                                   Bandit                                     #
+# ---------------------------------------------------------------------------- #
+[tool.bandit]
+exclude_dirs = [
+    "venv",
+    "./.venv",
+    "tests",
+    ".git",
+    "__pycache__",
+]  # Dossiers à exclure de l'analyse de sécurité.
+
+# ---------------------------------------------------------------------------- #
+#                                   Pytest                                     #
+# ---------------------------------------------------------------------------- #
+
+[tool.pytest.ini_options]
+addopts = """
+--tb=long
+--code-highlight=yes
+--color=yes
+-vv
+"""
+#--cov=src
+#--cov-report=term-missing
+#--cov-report=html
+#--cov-branch
+testpaths = ["tests"]  # Chemins où Pytest recherche les tests.
+pythonpath = ["src"]
+
+# ---------------------------------------------------------------------------- #
+#                                  Coverage                                    #
+# ---------------------------------------------------------------------------- #
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/__init__.py",
+    "tests/*",
+#    "src/flask_boilerplate/domain/primitives/*",
+#    "src/flask_boilerplate/domain/enums/*",
+]
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    ]
+
+ignore_errors = true
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# ---------------------------------------------------------------------------- #
+#                                 Commitizen                                   #
+# ---------------------------------------------------------------------------- #
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_provider = "poetry"
+version = "0.1.0"
+tag_format = "v$version"
+version_files = [
+    "VERSION",
+    "setup.py",
+    "pyproject.toml:version"
+]
+bump_message = "bump: version $current_version → $new_version"
+update_changelog_on_bump = true
+annotated_tag = true

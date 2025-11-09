@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Balises Meta SEO -->
+    <title>{% block title %}Outils en Ligne Gratuits{% endblock %}</title>
+    <meta
+      name="description"
+      content="{% block description %}Collection d'outils en ligne gratuits pour développeurs et professionnels. Encodeur/décodeur Base64, conversion de texte et plus.{% endblock %}"
+    />
+    <meta
+      name="keywords"
+      content="{% block keywords %}outils en ligne, encodeur base64, décodeur base64, conversion texte, outils développeur{% endblock %}"
+    />
+    <link rel="canonical" href="{% block canonical %}/{% endblock %}" />
+
+    <!-- Open Graph -->
+    <meta
+      property="og:title"
+      content="{% block og_title %}Outils en Ligne Gratuits{% endblock %}"
+    />
+    <meta
+      property="og:description"
+      content="{% block og_description %}Collection d'outils en ligne gratuits pour développeurs{% endblock %}"
+    />
+    <meta
+      property="og:image"
+      content="{% block og_image %}/static/images/og-image.jpg{% endblock %}"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %}Outils en Ligne Gratuits{% endblock %}"
+    />
+    <meta
+      name="twitter:description"
+      content="{% block twitter_description %}Collection d'outils en ligne gratuits{% endblock %}"
+    />
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Outils en Ligne Gratuits",
+        "description": "Collection d'outils en ligne gratuits pour développeurs",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Menu latéral -->
+      <aside class="sidebar" role="navigation" aria-label="Menu principal">
+        <div class="logo">
+          <h1>Outils en Ligne</h1>
+        </div>
+
+        <nav class="main-nav">
+          <ul>
+            <li class="nav-category">Outils Base64</li>
+            <li>
+              <a
+                href="/"
+                class="nav-link {% if request.url.path == '/' %}active{% endif %}"
+                aria-label="Accueil outils Base64"
+              >
+                🏠 Accueil Base64
+              </a>
+            </li>
+            <li>
+              <a
+                href="/encode"
+                class="nav-link {% if request.url.path == '/encode' %}active{% endif %}"
+                aria-label="Encoder en Base64"
+              >
+                🔤 Encoder Base64
+              </a>
+            </li>
+            <li>
+              <a
+                href="/decode"
+                class="nav-link {% if request.url.path == '/decode' %}active{% endif %}"
+                aria-label="Décoder le Base64"
+              >
+                📝 Décoder Base64
+              </a>
+            </li>
+
+            <!-- Placeholder pour futurs outils -->
+            <li class="nav-category">Autres Outils</li>
+            <li>
+              <a
+                href="#"
+                class="nav-link coming-soon"
+                aria-label="Outil à venir"
+              >
+                ⏳ URL Encode/Decode
+                <span class="badge">Bientôt</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="nav-link coming-soon"
+                aria-label="Outil à venir"
+              >
+                ⏳ Hash Generator
+                <span class="badge">Bientôt</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="nav-link coming-soon"
+                aria-label="Outil à venir"
+              >
+                ⏳ JSON Formatter
+                <span class="badge">Bientôt</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <p>📧 <a href="/contact">Suggestions d'outils</a></p>
+        </div>
+      </aside>
+
+      <!-- Contenu principal -->
+      <main class="main-content" role="main">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+  </body>
+</html>
