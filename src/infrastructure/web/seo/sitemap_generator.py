@@ -31,6 +31,7 @@ class SitemapGenerator:
                 "changefreq": "monthly",
                 "lastmod": datetime.now().strftime("%Y-%m-%d"),
             },
+            {"loc": "/contact", "priority": "0.5", "changefreq": "monthly"},
         ]
 
         # Rendre le template

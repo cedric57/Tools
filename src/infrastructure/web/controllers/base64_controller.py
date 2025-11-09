@@ -4,8 +4,9 @@ from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.openapi.models import Response
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
-from ....application.dto.base64_dto import PageContext
+from ....application.dto.base64_dto import PageContext, SEOConfig
 from ....application.use_cases.base64_operations import Base64UseCases
 from ....core.entities.base64 import Base64DecodeRequest, Base64EncodeRequest
 from ....infrastructure.repositories.base64_repository_impl import Base64RepositoryImpl
@@ -138,3 +139,97 @@ Sitemap: {base_url}/sitemap.xml"""
     return Response(
         content=content, media_type="text/plain", headers={"Content-Disposition": "inline; filename=robots.txt"}
     )
+
+
+class ContactRequest(BaseModel):
+    name: str
+    email: str
+    subject: str
+    message: str
+    tool_suggestion: str | None = ""
+
+
+@router.get("/contact", response_class=HTMLResponse)
+async def contact_form(request: Request):
+    """Affiche le formulaire de contact"""
+    seo_config = SEOConfig(
+        title="Contact - Outils en Ligne",
+        description="Contactez-nous pour des suggestions d'outils, des questions ou des retours. Nous sommes à votre écoute !",
+        keywords="contact, suggestions outils, feedback, support, questions",
+        canonical_url="/contact",
+        og_title="Contact - Outils en Ligne",
+        og_description="Contactez-nous pour des suggestions ou questions",
+    )
+    context = PageContext(seo=seo_config)
+    return templates.TemplateResponse("contact.html", {"request": request, "context": context})
+
+
+@router.post("/contact", response_class=HTMLResponse)
+async def send_contact_message(
+    request: Request,
+    name: str = Form(...),
+    email: str = Form(...),
+    subject: str = Form(...),
+    message: str = Form(...),
+    tool_suggestion: str = Form(""),
+):
+    """Traite l'envoi du formulaire de contact"""
+    try:
+        # Validation basique de l'email
+        if "@" not in email or "." not in email:
+            raise HTTPException(status_code=400, detail="Email invalide")
+
+        # Ici vous pourriez intégrer un service d'email comme SendGrid, Mailgun, etc.
+        # Pour l'instant, nous allons simplement simuler l'envoi
+
+        seo_config = SEOConfig(
+            title="Message Envoyé - Outils en Ligne",
+            description="Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.",
+            keywords="message envoyé, contact réussi, confirmation",
+            canonical_url="/contact",
+            og_title="Message Envoyé - Outils en Ligne",
+            og_description="Votre message a été envoyé avec succès",
+        )
+
+        context = PageContext(
+            seo=seo_config,
+            contact_success=True,
+            original_name=name,
+            original_email=email,
+            original_subject=subject,
+            original_message=message,
+            original_tool_suggestion=tool_suggestion,
+        )
+
+        # Log du message (dans un vrai projet, enregistrez en base de données)
+        print("📧 Nouveau message de contact:")
+        print(f"   Nom: {name}")
+        print(f"   Email: {email}")
+        print(f"   Sujet: {subject}")
+        print(f"   Message: {message}")
+        if tool_suggestion:
+            print(f"   Suggestion d'outil: {tool_suggestion}")
+
+        return templates.TemplateResponse("contact.html", {"request": request, "context": context})
+
+    except Exception as e:
+        seo_config = SEOConfig(
+            title="Erreur - Contact",
+            description="Une erreur est survenue lors de l'envoi de votre message.",
+            keywords="erreur contact, problème envoi",
+            canonical_url="/contact",
+            og_title="Erreur - Contact",
+            og_description="Erreur lors de l'envoi du message",
+        )
+
+        context = PageContext(
+            seo=seo_config,
+            contact_error=f"Une erreur est survenue: {str(e)}",
+            original_name=name,
+            original_email=email,
+            original_subject=subject,
+            original_message=message,
+            original_tool_suggestion=tool_suggestion,
+        )
+
+        return templates.TemplateResponse("contact.html", {"request": request, "context": context})

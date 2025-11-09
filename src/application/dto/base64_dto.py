@@ -27,3 +27,10 @@ class PageContext(BaseModel):
     charset: str = "utf-8"
     encoding_categories: list[EncodingCategory] = []
     decode_line_by_line: bool = False
+    contact_success: bool = False
+    contact_error: str = ""
+    original_name: str = ""
+    original_email: str = ""
+    original_subject: str = ""
+    original_message: str = ""
+    original_tool_suggestion: str = ""
