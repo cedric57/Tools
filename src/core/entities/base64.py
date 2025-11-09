@@ -9,6 +9,7 @@ class Base64EncodeRequest(BaseModel):
 class Base64DecodeRequest(BaseModel):
     base64_text: str
     charset: str = "utf-8"
+    decode_line_by_line: bool = False  # Nouveau champ
 
 
 class Base64Response(BaseModel):

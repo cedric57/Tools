@@ -1,6 +1,7 @@
 import os
 
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Form, HTTPException, Request
+from fastapi.openapi.models import Response
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -70,11 +71,18 @@ async def decode_form(request: Request):
 
 
 @router.post("/decode", response_class=HTMLResponse)
-async def decode_base64(request: Request, base64_text: str = Form(...), character_set: str = Form("auto")):
+async def decode_base64(
+    request: Request,
+    base64_text: str = Form(...),
+    character_set: str = Form("auto"),
+    decode_line_by_line: bool = Form(False),
+):
     """Traite le décodage (POST)"""
     seo_config = MetaGenerator.get_decode_seo()
     encoding_categories = MetaGenerator.get_encoding_categories()
-    decode_request = Base64DecodeRequest(base64_text=base64_text, charset=character_set)
+    decode_request = Base64DecodeRequest(
+        base64_text=base64_text, charset=character_set, decode_line_by_line=decode_line_by_line
+    )
     result = await base64_use_cases.decode_text(decode_request)
 
     context = PageContext(
@@ -83,6 +91,7 @@ async def decode_base64(request: Request, base64_text: str = Form(...), characte
         decode_error=result.error if not result.success else "",
         original_base64=base64_text,
         charset=character_set,
+        decode_line_by_line=decode_line_by_line,
         encoding_categories=encoding_categories,
     )
 

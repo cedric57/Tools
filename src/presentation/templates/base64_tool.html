@@ -50,6 +50,17 @@
                           required>{{ context.original_base64 }}</textarea>
                 <small id="decode-help">Collez votre texte encodé en Base64 pour le décoder</small>
 
+                <div class="checkbox-group">
+                    <input type="checkbox" id="decode_line_by_line" name="decode_line_by_line"
+                           value="true" {% if context.decode_line_by_line %}checked{% endif %}>
+                    <label for="decode_line_by_line" class="checkbox-label">
+                        📄 Décoder chaque ligne séparément
+                    </label>
+                    <small class="checkbox-help">
+                        Utile pour les entrées multiples (une chaîne Base64 par ligne)
+                    </small>
+                </div>
+
                 <label for="charset_decode">Encodage des caractères :</label>
                 <select id="charset_decode" name="character_set" class="encoding-select">
                     {% for category in context.encoding_categories %}
@@ -249,6 +260,20 @@
                           placeholder="Pastez votre chaîne Base64 ici..."
                           required>{{ context.original_base64 }}</textarea>
                 <small id="decode-help">Collez votre texte encodé en Base64 pour le décoder. Doit être un Base64 valide.</small>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="decode_line_by_line" name="decode_line_by_line"
+                           value="true" {% if context.decode_line_by_line %}checked{% endif %}
+                           aria-describedby="line-by-line-help">
+                    <label for="decode_line_by_line" class="checkbox-label">
+                        📄 Décoder chaque ligne séparément
+                    </label>
+                </div>
+                <small id="line-by-line-help" class="checkbox-help">
+                    Active le décodage individuel de chaque ligne. Parfait pour les listes de tokens, clés, ou données multiples.
+                </small>
             </div>
 
             <div class="form-group">

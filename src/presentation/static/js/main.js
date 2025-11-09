@@ -378,3 +378,60 @@ document.addEventListener("keydown", (e) => {
 		setTimeout(() => notification.remove(), 2000);
 	}
 });
+
+// Fonction pour formater automatiquement les entrées multiples
+function autoFormatMultipleEntries() {
+	const decodeTextarea = document.getElementById("base64_text");
+	const lineByLineCheckbox = document.getElementById("decode_line_by_line");
+
+	if (decodeTextarea && lineByLineCheckbox) {
+		decodeTextarea.addEventListener("input", function () {
+			const lines = this.value.split("\n").filter((line) => line.trim());
+
+			// Si on détecte plusieurs lignes non vides, suggérer le décodage ligne par ligne
+			if (lines.length > 1 && !lineByLineCheckbox.checked) {
+				// Optionnel : Afficher une suggestion
+				const suggestion = document.getElementById("multi-line-suggestion");
+				if (!suggestion) {
+					const suggestionDiv = document.createElement("div");
+					suggestionDiv.id = "multi-line-suggestion";
+					suggestionDiv.className = "suggestion";
+					suggestionDiv.innerHTML = `
+                        <span>💡 Plusieurs lignes détectées. </span>
+                        <button type="button" onclick="enableLineByLine()" class="btn-suggestion">
+                            Activer le décodage ligne par ligne
+                        </button>
+                    `;
+					decodeTextarea.parentNode.insertBefore(
+						suggestionDiv,
+						decodeTextarea.nextSibling,
+					);
+				}
+			} else {
+				const suggestion = document.getElementById("multi-line-suggestion");
+				if (suggestion) {
+					suggestion.remove();
+				}
+			}
+		});
+	}
+}
+
+function enableLineByLine() {
+	const checkbox = document.getElementById("decode_line_by_line");
+	if (checkbox) {
+		checkbox.checked = true;
+		const suggestion = document.getElementById("multi-line-suggestion");
+		if (suggestion) {
+			suggestion.innerHTML = "✅ Décodage ligne par ligne activé!";
+			setTimeout(() => {
+				suggestion.remove();
+			}, 3000);
+		}
+	}
+}
+
+// Initialiser au chargement
+document.addEventListener("DOMContentLoaded", () => {
+	autoFormatMultipleEntries();
+});

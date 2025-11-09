@@ -26,3 +26,4 @@ class PageContext(BaseModel):
     original_text: str = ""
     charset: str = "utf-8"
     encoding_categories: list[EncodingCategory] = []
+    decode_line_by_line: bool = False
