@@ -233,7 +233,7 @@ repos:
       - id: prettier
         name: "✨ misc-files · Format misc web files"
         args:
-          - "--write"
+          - "--write --bracket-same-line"
         types_or: [yaml, html, scss, toml]
         additional_dependencies:
           - prettier@3.4.2
