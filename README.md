@@ -34,3 +34,8 @@ Accédez à http://127.0.0.1:8000
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues ! N'hésitez pas à proposer de nouveaux outils.
+
+## TODO
+
+- intégrer un service d'email comme SendGrid
+- utiliser des webhooks pour envoyer les messages vers un canal Slack/Discord.

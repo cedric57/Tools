@@ -10,163 +10,226 @@
 {% block twitter_description %}{{ context.seo.og_description }}{% endblock %}
 
 {% block content %}
-<div class="content-header">
-    <h1 id="main-heading">📧 Contactez-nous</h1>
-    <p class="subtitle">Une question, une suggestion d'outil, ou simplement un mot ? Nous sommes à votre écoute !</p>
-</div>
-
-<!-- Indicateur visuel de la page active -->
-<div class="tool-indicator">
-    <span class="tool-badge">Contact</span>
-    <span class="tool-action">Message</span>
+<!-- En-tête de page -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-1">📧 Contactez-nous</h1>
+        <p class="text-muted mb-0">Une question, une suggestion d'outil, ou simplement un mot ? Nous sommes à votre écoute !</p>
+    </div>
+    <div class="badge bg-primary fs-6">
+        <i class="bi bi-envelope me-1"></i>Contact
+    </div>
 </div>
 
 {% if context.contact_success %}
 <!-- Message de succès -->
-<div class="success-message" role="alert">
-    <div class="success-icon">✅</div>
-    <div class="success-content">
-        <h3>Message envoyé avec succès !</h3>
-        <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
-        <div class="success-details">
-            <p><strong>Récapitulatif :</strong></p>
-            <ul>
-                <li><strong>Nom :</strong> {{ context.original_name }}</li>
-                <li><strong>Email :</strong> {{ context.original_email }}</li>
-                <li><strong>Sujet :</strong> {{ context.original_subject }}</li>
-                {% if context.original_tool_suggestion %}
-                <li><strong>Suggestion d'outil :</strong> {{ context.original_tool_suggestion }}</li>
-                {% endif %}
-            </ul>
+<div class="alert alert-success d-flex align-items-center" role="alert">
+    <i class="bi bi-check-circle-fill me-3 fs-4"></i>
+    <div class="w-100">
+        <h4 class="alert-heading mb-3">Message envoyé avec succès !</h4>
+        <p class="mb-3">Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
+
+        <div class="card bg-light">
+            <div class="card-body">
+                <h6 class="card-title">Récapitulatif :</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Nom :</strong> {{ context.original_name }}</p>
+                        <p class="mb-1"><strong>Email :</strong> {{ context.original_email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Sujet :</strong> {{ context.original_subject }}</p>
+                        {% if context.original_tool_suggestion %}
+                        <p class="mb-1"><strong>Suggestion :</strong> {{ context.original_tool_suggestion }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="/contact" class="btn-primary">📧 Envoyer un autre message</a>
+
+        <div class="mt-3">
+            <a href="/contact" class="btn btn-primary">
+                <i class="bi bi-envelope me-2"></i>Envoyer un autre message
+            </a>
+        </div>
     </div>
 </div>
 
 {% else %}
 <!-- Formulaire de contact -->
-<section class="contact-form-section">
-    <div class="form-intro">
-        <h2>Envoyez-nous un message</h2>
-        <p>Nous apprécions vos retours et suggestions pour améliorer nos outils. N'hésitez pas à nous contacter !</p>
-    </div>
-
-    {% if context.contact_error %}
-    <div class="error" role="alert">
-        <strong>Erreur :</strong> {{ context.contact_error }}
-    </div>
-    {% endif %}
-
-    <form method="post" action="/contact" class="contact-form" role="form">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="name">Votre nom *</label>
-                <input type="text" id="name" name="name"
-                       value="{{ context.original_name or '' }}"
-                       placeholder="Votre nom complet"
-                       required
-                       aria-describedby="name-help">
-                <small id="name-help">Comment souhaitez-vous que nous vous appelions ?</small>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="h5 mb-0">
+                    <i class="bi bi-envelope me-2"></i>Envoyez-nous un message
+                </h3>
             </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">Nous apprécions vos retours et suggestions pour améliorer nos outils. N'hésitez pas à nous contacter !</p>
 
-            <div class="form-group">
-                <label for="email">Votre email *</label>
-                <input type="email" id="email" name="email"
-                       value="{{ context.original_email or '' }}"
-                       placeholder="votre@email.com"
-                       required
-                       aria-describedby="email-help">
-                <small id="email-help">Nous ne partagerons jamais votre email avec des tiers.</small>
+                {% if context.contact_error %}
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <div>
+                        <strong>Erreur :</strong> {{ context.contact_error }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <form method="post" action="/contact" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Votre nom *</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   value="{{ context.original_name or '' }}"
+                                   placeholder="Votre nom complet" required>
+                            <div class="form-text">Comment souhaitez-vous que nous vous appelions ?</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-semibold">Votre email *</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   value="{{ context.original_email or '' }}"
+                                   placeholder="votre@email.com" required>
+                            <div class="form-text">Nous ne partagerons jamais votre email avec des tiers.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="subject" class="form-label fw-semibold">Sujet du message *</label>
+                            <select class="form-select" id="subject" name="subject" required>
+                                <option value="">Choisissez un sujet...</option>
+                                <option value="Suggestion d'outil" {% if context.original_subject == 'Suggestion d\'outil' %}selected{% endif %}>💡 Suggestion d'outil</option>
+                                <option value="Problème technique" {% if context.original_subject == 'Problème technique' %}selected{% endif %}>🐛 Problème technique</option>
+                                <option value="Question générale" {% if context.original_subject == 'Question générale' %}selected{% endif %}>❓ Question générale</option>
+                                <option value="Collaboration" {% if context.original_subject == 'Collaboration' %}selected{% endif %}>🤝 Collaboration</option>
+                                <option value="Autre" {% if context.original_subject == 'Autre' %}selected{% endif %}>📝 Autre</option>
+                            </select>
+                            <div class="form-text">Choisissez la catégorie qui correspond le mieux à votre message.</div>
+                        </div>
+
+                        <div class="col-12" id="tool-suggestion-group"
+                             style="display: {% if context.original_subject == 'Suggestion d\'outil' or context.original_tool_suggestion %}block{% else %}none{% endif %};">
+                            <label for="tool_suggestion" class="form-label fw-semibold">Quel outil souhaiteriez-vous voir ajouté ?</label>
+                            <input type="text" class="form-control" id="tool_suggestion" name="tool_suggestion"
+                                   value="{{ context.original_tool_suggestion or '' }}"
+                                   placeholder="Ex: Convertisseur JSON, Générateur de QR Code, etc.">
+                            <div class="form-text">Décrivez brièvement l'outil que vous aimeriez utiliser.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="message" class="form-label fw-semibold">Votre message *</label>
+                            <textarea class="form-control" id="message" name="message"
+                                      placeholder="Décrivez en détail votre question, suggestion ou problème..."
+                                      rows="5" required>{{ context.original_message or '' }}</textarea>
+                            <div class="form-text">Soyez aussi précis que possible pour que nous puissions vous aider au mieux.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-send me-2"></i>Envoyer le message
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary btn-lg">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Effacer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Informations de contact alternatives -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h4 class="h6 mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Autres moyens de nous contacter
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-3">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-lightbulb text-warning me-3 fs-5"></i>
+                        <div>
+                            <h6 class="mb-1">Suggestions d'outils</h6>
+                            <p class="text-muted small mb-0">Vous avez une idée d'outil qui pourrait être utile ?</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-bug-fill text-danger me-3 fs-5"></i>
+                        <div>
+                            <h6 class="mb-1">Signaler un problème</h6>
+                            <p class="text-muted small mb-0">Vous avez rencontré un bug ou un dysfonctionnement ?</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-star text-primary me-3 fs-5"></i>
+                        <div>
+                            <h6 class="mb-1">Améliorations</h6>
+                            <p class="text-muted small mb-0">Vous avez des idées pour améliorer nos outils existants ?</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="subject">Sujet du message *</label>
-            <select id="subject" name="subject" required aria-describedby="subject-help">
-                <option value="">Choisissez un sujet...</option>
-                <option value="Suggestion d'outil" {% if context.original_subject == 'Suggestion d\'outil' %}selected{% endif %}>💡 Suggestion d'outil</option>
-                <option value="Problème technique" {% if context.original_subject == 'Problème technique' %}selected{% endif %}>🐛 Problème technique</option>
-                <option value="Question générale" {% if context.original_subject == 'Question générale' %}selected{% endif %}>❓ Question générale</option>
-                <option value="Collaboration" {% if context.original_subject == 'Collaboration' %}selected{% endif %}>🤝 Collaboration</option>
-                <option value="Autre" {% if context.original_subject == 'Autre' %}selected{% endif %}>📝 Autre</option>
-            </select>
-            <small id="subject-help">Choisissez la catégorie qui correspond le mieux à votre message.</small>
-        </div>
+        <!-- FAQ de contact -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h4 class="h6 mb-0">
+                    <i class="bi bi-question-circle me-2"></i>Questions fréquentes
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="accordion accordion-flush" id="contactFAQ">
+                    <div class="accordion-item">
+                        <h5 class="accordion-header">
+                            <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#faqContact1">
+                                ⏱️ Délai de réponse
+                            </button>
+                        </h5>
+                        <div id="faqContact1" class="accordion-collapse collapse" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body small">
+                                Nous nous efforçons de répondre à tous les messages dans un délai de 24 à 48 heures.
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="form-group" id="tool-suggestion-group"
-             style="display: {% if context.original_subject == 'Suggestion d\'outil' or context.original_tool_suggestion %}block{% else %}none{% endif %};">
-            <label for="tool_suggestion">Quel outil souhaiteriez-vous voir ajouté ?</label>
-            <input type="text" id="tool_suggestion" name="tool_suggestion"
-                   value="{{ context.original_tool_suggestion or '' }}"
-                   placeholder="Ex: Convertisseur JSON, Générateur de QR Code, etc."
-                   aria-describedby="tool-help">
-            <small id="tool-help">Décrivez brièvement l'outil que vous aimeriez utiliser.</small>
-        </div>
+                    <div class="accordion-item">
+                        <h5 class="accordion-header">
+                            <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#faqContact2">
+                                🔧 Proposer un outil
+                            </button>
+                        </h5>
+                        <div id="faqContact2" class="accordion-collapse collapse" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body small">
+                                Absolument ! Nous adorons recevoir des suggestions d'outils. Décrivez-nous votre idée et nous l'étudierons.
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label for="message">Votre message *</label>
-            <textarea id="message" name="message"
-                      placeholder="Décrivez en détail votre question, suggestion ou problème..."
-                      required
-                      rows="6"
-                      aria-describedby="message-help">{{ context.original_message or '' }}</textarea>
-            <small id="message-help">Soyez aussi précis que possible pour que nous puissions vous aider au mieux.</small>
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn-primary">
-                📤 Envoyer le message
-            </button>
-            <button type="reset" class="btn-secondary">
-                🧹 Effacer
-            </button>
-        </div>
-    </form>
-</section>
-
-<!-- Informations de contact alternatives -->
-<section class="contact-info">
-    <h2>Autres moyens de nous contacter</h2>
-    <div class="contact-methods">
-        <div class="contact-method">
-            <div class="method-icon">📋</div>
-            <h3>Suggestions d'outils</h3>
-            <p>Vous avez une idée d'outil qui pourrait être utile ? N'hésitez pas à nous en faire part !</p>
-        </div>
-
-        <div class="contact-method">
-            <div class="method-icon">🐛</div>
-            <h3>Signaler un problème</h3>
-            <p>Vous avez rencontré un bug ou un dysfonctionnement ? Aidez-nous à améliorer nos outils.</p>
-        </div>
-
-        <div class="contact-method">
-            <div class="method-icon">💡</div>
-            <h3>Améliorations</h3>
-            <p>Vous avez des idées pour améliorer nos outils existants ? Nous sommes ouverts à vos suggestions.</p>
+                    <div class="accordion-item">
+                        <h5 class="accordion-header">
+                            <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#faqContact3">
+                                🐛 Signaler un bug
+                            </button>
+                        </h5>
+                        <div id="faqContact3" class="accordion-collapse collapse" data-bs-parent="#contactFAQ">
+                            <div class="accordion-body small">
+                                Utilisez le formulaire en sélectionnant "Problème technique". Décrivez le problème en détail, y compris les étapes pour le reproduire.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</section>
-
-<!-- FAQ de contact -->
-<section class="contact-faq">
-    <h2>Questions fréquentes</h2>
-
-    <article class="faq-item">
-        <h3>⏱️ Dans combien de temps vais-je recevoir une réponse ?</h3>
-        <p>Nous nous efforçons de répondre à tous les messages dans un délai de 24 à 48 heures.</p>
-    </article>
-
-    <article class="faq-item">
-        <h3>🔧 Puis-je proposer un nouvel outil ?</h3>
-        <p>Absolument ! Nous adorons recevoir des suggestions d'outils. Décrivez-nous votre idée et nous l'étudierons.</p>
-    </article>
-
-    <article class="faq-item">
-        <h3>🐛 Comment signaler un bug ?</h3>
-        <p>Utilisez le formulaire ci-dessus en sélectionnant "Problème technique". Décrivez le problème en détail, y compris les étapes pour le reproduire.</p>
-    </article>
-</section>
+</div>
 {% endif %}
 
 <script>
@@ -183,6 +246,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 toolSuggestionGroup.style.display = 'none';
             }
         });
+    }
+
+    // Validation Bootstrap
+    const forms = document.querySelectorAll('.needs-validation');
+    for (const form of forms) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
     }
 
     // Focus sur le premier champ
