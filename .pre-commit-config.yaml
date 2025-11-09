@@ -227,14 +227,26 @@ repos:
         args: ["-o", "4", "--strip", "safe", "--alpha"]
 
   ### Additional File Types ###
+  # - repo: https://github.com/oxsecurity/megalinter
+  #   rev: v6.8.0 # Git tag specifying the hook, not mega-linter-runner, version
+  #   hooks:
+  #     - id: megalinter-incremental # Faster, less thorough
+  #       name: "✨ misc-files · Format misc web files"
+  #       stages:
+  #         - commit
+  #     - id: megalinter-full # Slower, more thorough
+  #       name: "✨ misc-files · Format misc web files"
+  #       stages:
+  #         - push
+
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
         name: "✨ misc-files · Format misc web files"
         args:
-          - "--write --bracket-same-line"
-        types_or: [yaml, html, scss, toml]
+          - "--write" # --bracket-same-line --embedded-language-formatting=off"
+        types_or: [yaml, scss, toml]
         additional_dependencies:
           - prettier@3.4.2
 
