@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  tools-app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=false
+    restart: unless-stopped
