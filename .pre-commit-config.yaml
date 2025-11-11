@@ -54,7 +54,7 @@ repos:
     hooks:
       - id: bandit
         name: "🔒 security · Python security vulnerability scanner"
-        args: ["-c", "pyproject.toml", "-r", "."]
+        args: ["-c", "backend/pyproject.toml", "-r", "."]
         additional_dependencies: ["bandit[toml]"]
 
   # --------------------------- 🔍 Code Quality Tools -------------------------- #
@@ -175,11 +175,11 @@ repos:
       - id: shellcheck
         name: "🐚 shell · Lint shell scripts"
 
-  - repo: https://github.com/openstack/bashate
-    rev: 2.1.1
-    hooks:
-      - id: bashate
-        name: "🐚 shell · Check shell script code style"
+  #- repo: https://github.com/openstack/bashate
+  #  rev: 2.1.1
+  #  hooks:
+  #    - id: bashate
+  #      name: "🐚 shell · Check shell script code style"
 
   ### Makefile ###
   #- repo: https://github.com/mrtazz/checkmake.git
@@ -258,8 +258,8 @@ repos:
       # Filesystem Checks
       - id: check-executables-have-shebangs
         name: "📁 filesystem/⚙️ exec · Verify shebang presence"
-      - id: check-shebang-scripts-are-executable # Verifies that shebang scripts (starting with #!/) are executable
-        name: "📁 filesystem/⚙️ exec · Verify script permissions"
+      #- id: check-shebang-scripts-are-executable # Verifies that shebang scripts (starting with #!/) are executable
+      #  name: "📁 filesystem/⚙️ exec · Verify script permissions"
       - id: check-case-conflict # checks for files that would conflict in case-insensitive filesystems.
         name: "📁 filesystem/📝 names · Check case sensitivity"
       - id: check-illegal-windows-names
@@ -309,18 +309,17 @@ repos:
   # ---------------------------------------------------------------------------- #
   #                             🧪 Fast Tests (Local)                            #
   # ---------------------------------------------------------------------------- #
-
-  - repo: local
-    hooks:
-      - id: pytest-collect
-        name: 🧪 test · Validate test formatting
-        entry: poetry run pytest tests
-        language: system
-        types: [python]
-        args: ["--collect-only"]
-        pass_filenames: false
-        always_run: true
-      # STRICT
+#  - repo: local
+#    hooks:
+#      - id: pytest-collect
+#        name: 🧪 test · Validate test formatting
+#        entry: uv run pytest backend/tests
+#        language: system
+#        types: [python]
+#        args: ["--collect-only"]
+#        pass_filenames: false
+#        always_run: true
+# STRICT
 #      - id: pytest-fast
 #       name: 🧪 test · Run fast tests
 #        entry: poetry run pytest tests

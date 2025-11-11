@@ -6,17 +6,21 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
-from ....application.dto.base64_dto import PageContext, SEOConfig
-from ....application.use_cases.base64_operations import Base64UseCases
-from ....core.entities.base64 import Base64DecodeRequest, Base64EncodeRequest
-from ....infrastructure.repositories.base64_repository_impl import Base64RepositoryImpl
+from backend.src.application.dto import PageContext, SEOConfig
+from backend.src.application.use_cases import Base64UseCases
+from backend.src.domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest
+from backend.src.infrastructure.repositories.base64_repository_impl import (
+    Base64RepositoryImpl,
+)
 from ....infrastructure.web.seo.meta_generator import MetaGenerator
 from ....infrastructure.web.seo.sitemap_generator import SitemapGenerator
 
 router = APIRouter()
 
 # Configuration des templates
-templates_path = os.path.join(os.path.dirname(__file__), "../../../presentation/templates")
+templates_path = os.path.join(
+    os.path.dirname(__file__), "../../../presentation/templates"
+)
 templates = Jinja2Templates(directory=templates_path)
 
 # Initialisation des use cases
@@ -30,7 +34,9 @@ async def home(request: Request):
     seo_config = MetaGenerator.get_home_seo()
     encoding_categories = MetaGenerator.get_encoding_categories()
     context = PageContext(seo=seo_config, encoding_categories=encoding_categories)
-    return templates.TemplateResponse("base64_tool.html", {"request": request, "context": context})
+    return templates.TemplateResponse(
+        "base64_tool.html", {"request": request, "context": context}
+    )
 
 
 @router.get("/encode", response_class=HTMLResponse)
@@ -39,11 +45,15 @@ async def encode_form(request: Request):
     seo_config = MetaGenerator.get_encode_seo()
     encoding_categories = MetaGenerator.get_encoding_categories()
     context = PageContext(seo=seo_config, encoding_categories=encoding_categories)
-    return templates.TemplateResponse("base64_tool.html", {"request": request, "context": context})
+    return templates.TemplateResponse(
+        "base64_tool.html", {"request": request, "context": context}
+    )
 
 
 @router.post("/encode", response_class=HTMLResponse)
-async def encode_text(request: Request, plain_text: str = Form(...), character_set: str = Form("auto")):
+async def encode_text(
+    request: Request, plain_text: str = Form(...), character_set: str = Form("auto")
+):
     """Traite l'encodage (POST)"""
     seo_config = MetaGenerator.get_encode_seo()
     encoding_categories = MetaGenerator.get_encoding_categories()
@@ -59,7 +69,9 @@ async def encode_text(request: Request, plain_text: str = Form(...), character_s
         encoding_categories=encoding_categories,
     )
 
-    return templates.TemplateResponse("base64_tool.html", {"request": request, "context": context})
+    return templates.TemplateResponse(
+        "base64_tool.html", {"request": request, "context": context}
+    )
 
 
 @router.get("/decode", response_class=HTMLResponse)
@@ -68,7 +80,9 @@ async def decode_form(request: Request):
     seo_config = MetaGenerator.get_decode_seo()
     encoding_categories = MetaGenerator.get_encoding_categories()
     context = PageContext(seo=seo_config, encoding_categories=encoding_categories)
-    return templates.TemplateResponse("base64_tool.html", {"request": request, "context": context})
+    return templates.TemplateResponse(
+        "base64_tool.html", {"request": request, "context": context}
+    )
 
 
 @router.post("/decode", response_class=HTMLResponse)
@@ -82,7 +96,9 @@ async def decode_base64(
     seo_config = MetaGenerator.get_decode_seo()
     encoding_categories = MetaGenerator.get_encoding_categories()
     decode_request = Base64DecodeRequest(
-        base64_text=base64_text, charset=character_set, decode_line_by_line=decode_line_by_line
+        base64_text=base64_text,
+        charset=character_set,
+        decode_line_by_line=decode_line_by_line,
     )
     result = await base64_use_cases.decode_text(decode_request)
 
@@ -96,7 +112,9 @@ async def decode_base64(
         encoding_categories=encoding_categories,
     )
 
-    return templates.TemplateResponse("base64_tool.html", {"request": request, "context": context})
+    return templates.TemplateResponse(
+        "base64_tool.html", {"request": request, "context": context}
+    )
 
 
 @router.get("/sitemap.xml")
@@ -114,7 +132,9 @@ async def sitemap(request: Request):
                 headers={"Content-Disposition": "inline; filename=sitemap.xml"},
             )
         else:
-            raise HTTPException(status_code=500, detail="Erreur de génération du sitemap")
+            raise HTTPException(
+                status_code=500, detail="Erreur de génération du sitemap"
+            )
 
     except Exception as e:
         # Log l'erreur mais ne pas exposer les détails en production
@@ -137,7 +157,9 @@ Crawl-delay: 1
 Sitemap: {base_url}/sitemap.xml"""
 
     return Response(
-        content=content, media_type="text/plain", headers={"Content-Disposition": "inline; filename=robots.txt"}
+        content=content,
+        media_type="text/plain",
+        headers={"Content-Disposition": "inline; filename=robots.txt"},
     )
 
 
@@ -161,7 +183,9 @@ async def contact_form(request: Request):
         og_description="Contactez-nous pour des suggestions ou questions",
     )
     context = PageContext(seo=seo_config)
-    return templates.TemplateResponse("contact.html", {"request": request, "context": context})
+    return templates.TemplateResponse(
+        "contact.html", {"request": request, "context": context}
+    )
 
 
 @router.post("/contact", response_class=HTMLResponse)
@@ -210,7 +234,9 @@ async def send_contact_message(
         if tool_suggestion:
             print(f"   Suggestion d'outil: {tool_suggestion}")
 
-        return templates.TemplateResponse("contact.html", {"request": request, "context": context})
+        return templates.TemplateResponse(
+            "contact.html", {"request": request, "context": context}
+        )
 
     except Exception as e:
         seo_config = SEOConfig(
@@ -232,4 +258,6 @@ async def send_contact_message(
             original_tool_suggestion=tool_suggestion,
         )
 
-        return templates.TemplateResponse("contact.html", {"request": request, "context": context})
+        return templates.TemplateResponse(
+            "contact.html", {"request": request, "context": context}
+        )

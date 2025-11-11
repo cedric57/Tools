@@ -1,4 +1,4 @@
-from ....application.dto.base64_dto import EncodingCategory, SEOConfig
+from backend.src.application.dto import EncodingCategory, SEOConfig
 
 
 class MetaGenerator:
