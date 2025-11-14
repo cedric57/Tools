@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-from src.application.dto.base64_dto import EncodingCategoriesResponse, ToolConfig
-from src.application.use_cases.base64_operations import Base64UseCases
-from src.domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest, Base64Response
-from src.infrastructure.repositories.base64_repository_impl import Base64RepositoryImpl
+from application.dto.base64_dto import EncodingCategoriesResponse, ToolConfig
+from application.use_cases.base64_operations import Base64UseCases
+from domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest, Base64Response
+from infrastructure.repositories.base64_repository_impl import Base64RepositoryImpl
 
 router = APIRouter()
 

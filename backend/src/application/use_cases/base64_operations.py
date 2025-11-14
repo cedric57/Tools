@@ -3,9 +3,9 @@ import uuid
 from datetime import date
 
 import chardet
-from src.application.repositories.base64_repository import Base64Repository
+from application.repositories.base64_repository import Base64Repository
 
-from src.domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest, Base64Response
+from domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest, Base64Response
 
 
 class Base64UseCases:
