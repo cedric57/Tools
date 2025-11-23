@@ -36,6 +36,6 @@ def base64_repository():
 
 @pytest.fixture
 def base64_operations(base64_repository):
-    from application.use_cases.base64_operations import Base64UseCases
+    from application.use_cases.base64_operations import Base64Operations
 
-    return Base64UseCases(base64_repository)
+    return Base64Operations(base64_repository)

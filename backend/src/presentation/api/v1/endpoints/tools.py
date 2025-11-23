@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from application.dto.base64_dto import EncodingCategoriesResponse, ToolConfig
-from application.use_cases.base64_operations import Base64UseCases
+from application.use_cases.base64_operations import Base64Operations
 from domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest, Base64Response
 from infrastructure.repositories.base64_repository_impl import Base64RepositoryImpl
 
@@ -9,7 +9,7 @@ router = APIRouter()
 
 # Initialisation des use cases
 repository = Base64RepositoryImpl()
-base64_use_cases = Base64UseCases(repository)
+base64_use_cases = Base64Operations(repository)
 
 
 @router.post("/encode", response_model=Base64Response)

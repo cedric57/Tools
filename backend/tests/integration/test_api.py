@@ -8,7 +8,7 @@ class TestBase64API:
         request_data = {"text": "Hello API"}
 
         # Act
-        response = client.post("/encode", json=request_data)
+        response = client.post("/api/v1/tools/encode", json=request_data)
 
         # Assert
         assert response.status_code == 200
@@ -22,7 +22,7 @@ class TestBase64API:
         request_data = {"encoded": "SGVsbG8gQVBJ"}
 
         # Act
-        response = client.post("/decode", json=request_data)
+        response = client.post("/api/v1/tools/decode", json=request_data)
 
         # Assert
         assert response.status_code == 200
@@ -36,7 +36,7 @@ class TestBase64API:
         request_data = {"wrong_field": "test"}
 
         # Act
-        response = client.post("/encode", json=request_data)
+        response = client.post("/api/v1/tools/encode", json=request_data)
 
         # Assert
         assert response.status_code == 422  # Validation error
@@ -47,7 +47,7 @@ class TestBase64API:
         request_data = {"wrong_field": "test"}
 
         # Act
-        response = client.post("/decode", json=request_data)
+        response = client.post("/api/v1/tools/decode", json=request_data)
 
         # Assert
         assert response.status_code == 422  # Validation error
@@ -58,7 +58,7 @@ class TestBase64API:
         request_data = {"text": ""}
 
         # Act
-        response = client.post("/encode", json=request_data)
+        response = client.post("/api/v1/tools/encode", json=request_data)
 
         # Assert
         assert response.status_code == 200
@@ -71,7 +71,7 @@ class TestBase64API:
         request_data = {"encoded": ""}
 
         # Act
-        response = client.post("/decode", json=request_data)
+        response = client.post("/api/v1/tools/decode", json=request_data)
 
         # Assert
         assert response.status_code == 200

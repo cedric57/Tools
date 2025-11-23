@@ -3,12 +3,12 @@ import uuid
 from datetime import date
 
 import chardet
-from application.repositories.base64_repository import Base64Repository
 
+from application.repositories.base64_repository import Base64Repository
 from domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest, Base64Response
 
 
-class Base64UseCases:
+class Base64Operations:
     def __init__(self, repository: Base64Repository):
         self.repository = repository
         self.analytics_data = {

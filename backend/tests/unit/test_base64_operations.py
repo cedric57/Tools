@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from application.use_cases.base64_operations import Base64UseCases
+from application.use_cases.base64_operations import Base64Operations
 
 
 class TestBase64Operations:
@@ -10,7 +10,7 @@ class TestBase64Operations:
     def test_encode_text_calls_repository(self):
         # Arrange
         mock_repository = Mock()
-        operations = Base64UseCases(mock_repository)
+        operations = Base64Operations(mock_repository)
         input_text = "test input"
         expected_encoded = "dGVzdCBpbnB1dA=="
 
@@ -27,7 +27,7 @@ class TestBase64Operations:
     def test_decode_text_calls_repository(self):
         # Arrange
         mock_repository = Mock()
-        operations = Base64UseCases(mock_repository)
+        operations = Base64Operations(mock_repository)
         encoded_text = "dGVzdCBpbnB1dA=="
         expected_decoded = "test input"
 
@@ -44,7 +44,7 @@ class TestBase64Operations:
     def test_encode_text_with_empty_string(self):
         # Arrange
         mock_repository = Mock()
-        operations = Base64UseCases(mock_repository)
+        operations = Base64Operations(mock_repository)
         input_text = ""
         expected_encoded = ""
 
@@ -61,7 +61,7 @@ class TestBase64Operations:
     def test_decode_text_with_empty_string(self):
         # Arrange
         mock_repository = Mock()
-        operations = Base64UseCases(mock_repository)
+        operations = Base64Operations(mock_repository)
         encoded_text = ""
         expected_decoded = ""
 
