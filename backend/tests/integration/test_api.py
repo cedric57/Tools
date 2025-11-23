@@ -13,13 +13,13 @@ class TestBase64API:
         # Assert
         assert response.status_code == 200
         data = response.json()
-        assert "encoded" in data
-        assert data["encoded"] == "SGVsbG8gQVBJ"
+        assert "result" in data
+        assert data["result"] == "SGVsbG8gQVBJ"
 
     @pytest.mark.integration
     def test_decode_endpoint_success(self, client):
         # Arrange
-        request_data = {"encoded": "SGVsbG8gQVBJ"}
+        request_data = {"base64_text": "SGVsbG8gQVBJ"}
 
         # Act
         response = client.post("/api/v1/tools/decode", json=request_data)
@@ -27,8 +27,8 @@ class TestBase64API:
         # Assert
         assert response.status_code == 200
         data = response.json()
-        assert "decoded" in data
-        assert data["decoded"] == "Hello API"
+        assert "result" in data
+        assert data["result"] == "Hello API"
 
     @pytest.mark.integration
     def test_encode_endpoint_missing_field(self, client):
@@ -63,12 +63,12 @@ class TestBase64API:
         # Assert
         assert response.status_code == 200
         data = response.json()
-        assert data["encoded"] == ""
+        assert data["result"] == ""
 
     @pytest.mark.integration
     def test_decode_endpoint_empty_string(self, client):
         # Arrange
-        request_data = {"encoded": ""}
+        request_data = {"base64_text": ""}
 
         # Act
         response = client.post("/api/v1/tools/decode", json=request_data)
@@ -76,7 +76,7 @@ class TestBase64API:
         # Assert
         assert response.status_code == 200
         data = response.json()
-        assert data["decoded"] == ""
+        assert data["result"] == ""
 
     @pytest.mark.integration
     def test_health_check_endpoint(self, client):

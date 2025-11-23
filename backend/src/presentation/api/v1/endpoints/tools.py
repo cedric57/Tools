@@ -13,25 +13,25 @@ base64_use_cases = Base64Operations(repository)
 
 
 @router.post("/encode", response_model=Base64Response)
-async def encode_base64(request: Base64EncodeRequest):
+def encode_base64(request: Base64EncodeRequest):
     """Encode un texte en Base64"""
-    return await base64_use_cases.encode_text(request)
+    return base64_use_cases.encode_text(request)
 
 
 @router.post("/decode", response_model=Base64Response)
-async def decode_base64(request: Base64DecodeRequest):
+def decode_base64(request: Base64DecodeRequest):
     """Décode un texte Base64"""
-    return await base64_use_cases.decode_text(request)
+    return base64_use_cases.decode_text(request)
 
 
 @router.get("/encodings", response_model=EncodingCategoriesResponse)
-async def get_encoding_categories():
+def get_encoding_categories():
     """Retourne la liste des encodages supportés"""
     return EncodingCategoriesResponse.from_domain()
 
 
 @router.get("/config", response_model=ToolConfig)
-async def get_tool_config():
+def get_tool_config():
     """Retourne la configuration de l'outil"""
     return ToolConfig(
         name="Base64 Tools",
@@ -41,7 +41,7 @@ async def get_tool_config():
 
 
 @router.get("/health")
-async def tools_health():
+def tools_health():
     """Health check spécifique aux outils"""
     return {
         "status": "healthy",

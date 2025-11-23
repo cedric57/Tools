@@ -19,7 +19,7 @@ class Base64Operations:
             "daily_operations": {},
         }
 
-    async def encode_text(self, request: Base64EncodeRequest) -> Base64Response:
+    def encode_text(self, request: Base64EncodeRequest) -> Base64Response:
         try:
             # Gestion de l'auto-détection pour l'encodage
             charset = "utf-8" if request.charset == "auto" else request.charset
@@ -28,7 +28,7 @@ class Base64Operations:
             result = base64.b64encode(encoded_bytes).decode("ascii")
 
             # Enregistrement pour analytics
-            await self._record_operation("encode", charset)
+            self._record_operation("encode", charset)
 
             return Base64Response(
                 success=True,
@@ -40,19 +40,19 @@ class Base64Operations:
         except Exception as e:
             return Base64Response(success=False, error=f"Erreur d'encodage: {str(e)}", original_input=request.text)
 
-    async def decode_text(self, request: Base64DecodeRequest) -> Base64Response:
+    def decode_text(self, request: Base64DecodeRequest) -> Base64Response:
         try:
             if request.decode_line_by_line:
-                return await self._decode_line_by_line(request)
+                return self._decode_line_by_line(request)
             else:
-                return await self._decode_single(request)
+                return self._decode_single(request)
 
         except Exception as e:
             return Base64Response(
                 success=False, error=f"Erreur de décodage: {str(e)}", original_input=request.base64_text
             )
 
-    async def _decode_single(self, request: Base64DecodeRequest) -> Base64Response:
+    def _decode_single(self, request: Base64DecodeRequest) -> Base64Response:
         decoded_bytes = base64.b64decode(request.base64_text)
 
         if request.charset == "auto":
@@ -79,7 +79,7 @@ class Base64Operations:
             charset = request.charset
 
         # Enregistrement pour analytics
-        await self._record_operation("decode", charset)
+        self._record_operation("decode", charset)
 
         return Base64Response(
             success=True,
@@ -89,7 +89,7 @@ class Base64Operations:
             operation_id=str(uuid.uuid4()),
         )
 
-    async def _decode_line_by_line(self, request: Base64DecodeRequest) -> Base64Response:
+    def _decode_line_by_line(self, request: Base64DecodeRequest) -> Base64Response:
         lines = request.base64_text.strip().split("\n")
         results = []
         error_lines = []
@@ -125,7 +125,7 @@ class Base64Operations:
                     charset = request.charset
 
                 # Enregistrement pour analytics
-                await self._record_operation("decode", charset)
+                self._record_operation("decode", charset)
 
             except Exception as e:
                 error_lines.append(f"Ligne {i}: ERREUR - {str(e)}")
@@ -160,7 +160,7 @@ class Base64Operations:
             operation_id=str(uuid.uuid4()),
         )
 
-    async def _record_operation(self, operation_type: str, encoding: str):
+    def _record_operation(self, operation_type: str, encoding: str):
         """Enregistre une opération pour les analytics"""
         self.analytics_data["total_operations"] += 1
 
@@ -182,7 +182,7 @@ class Base64Operations:
         else:
             self.analytics_data["daily_operations"][today] = 1
 
-    async def get_analytics(self):
+    def get_analytics(self):
         """Retourne les données d'analytics"""
         most_used_encoding = max(
             self.analytics_data["encoding_usage"].items(), key=lambda x: x[1], default=("utf-8", 0)

@@ -10,12 +10,12 @@ class TestFullFlow:
         # Act - Encode via API
         encode_response = client.post("/api/v1/tools/encode", json={"text": original_text})
         assert encode_response.status_code == 200
-        encoded_text = encode_response.json()["encoded"]
+        encoded_text = encode_response.json()["result"]
 
         # Act - Decode via API
-        decode_response = client.post("/api/v1/tools/decode", json={"encoded": encoded_text})
+        decode_response = client.post("/api/v1/tools/decode", json={"base64_text": encoded_text})
         assert decode_response.status_code == 200
-        decoded_text = decode_response.json()["decoded"]
+        decoded_text = decode_response.json()["result"]
 
         # Assert
         assert decoded_text == original_text
