@@ -1,9 +1,11 @@
 import pytest
 
+from domain.entities.base64 import Base64DecodeRequest, Base64EncodeRequest
+
 
 class TestFullFlow:
     @pytest.mark.e2e
-    def test_full_encode_decode_flow(self, client, base64_operations):
+    def test_full_flow_via_api(self, client, base64_operations):
         # Arrange
         original_text = "Complete end-to-end test"
 
@@ -21,6 +23,22 @@ class TestFullFlow:
         assert decoded_text == original_text
 
     @pytest.mark.e2e
+    def test_full_encode_decode_flow(self, client, base64_operations):
+        # Arrange
+        original_text = "Complete end-to-end test"
+
+        # Act - Encode via les use cases (pas via API)
+        encode_request = Base64EncodeRequest(text=original_text)
+        encode_response = base64_operations.encode_text(encode_request)
+
+        # Act - Decode via les use cases
+        decode_request = Base64DecodeRequest(base64_text=encode_response.result)
+        decode_response = base64_operations.decode_text(decode_request)
+
+        # Assert
+        assert decode_response.result == original_text
+
+    @pytest.mark.e2e
     @pytest.mark.slow
     def test_multiple_operations_consistency(self, base64_operations):
         # Arrange
@@ -33,9 +51,13 @@ class TestFullFlow:
         ]
 
         for original_text in test_cases:
-            # Act
-            encoded = base64_operations.encode_text(original_text)
-            decoded = base64_operations.decode_text(encoded)
+            # Act - Encode via les use cases (pas via API)
+            encode_request = Base64EncodeRequest(text=original_text)
+            encode_response = base64_operations.encode_text(encode_request)
+
+            # Act - Decode via les use cases
+            decode_request = Base64DecodeRequest(base64_text=encode_response.result)
+            decode_response = base64_operations.decode_text(decode_request)
 
             # Assert
-            assert decoded == original_text, f"Failed for: {original_text}"
+            assert decode_response.result == original_text, f"Failed for: {original_text}"
