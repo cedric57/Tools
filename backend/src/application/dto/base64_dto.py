@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.domain.value_objects.encoding_types import EncodingTypes
+from domain.value_objects.encoding_types import EncodingTypes
 
 
 class ToolConfig(BaseModel):

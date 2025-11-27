@@ -1,6 +1,6 @@
 import json
 
-from pydantic import field_validator
+from pydantic import ConfigDict, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -39,6 +39,8 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     ENABLE_ANALYTICS: bool = True
 
+    model_config = ConfigDict(env_file=".env")
+
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v):
@@ -55,11 +57,6 @@ class Settings(BaseSettings):
         if v and "postgresql" in v and "://" not in v:
             raise ValueError("DATABASE_URL must be a valid URL")
         return v
-
-    class Config:
-        case_sensitive = True
-        env_file = ".env"
-        env_file_encoding = "utf-8"
 
 
 # Instance globale des settings
