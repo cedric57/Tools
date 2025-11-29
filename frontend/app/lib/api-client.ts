@@ -50,6 +50,16 @@ export class ApiClient {
 			}
 
 			const result: ApiResponse = await response.json();
+
+			// Ici, nous pouvons utiliser le guard si nous voulons effectuer des actions spécifiques
+			if (isApiSuccess(result)) {
+				// Faire quelque chose en cas de succès, par exemple logger
+				console.log("Message sent successfully");
+			} else {
+				// Faire quelque chose en cas d'erreur, par exemple logger
+				console.error("Failed to send message:", result.error);
+			}
+
 			return result;
 		} catch (error) {
 			console.error("Failed to send contact message:", error);
