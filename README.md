@@ -1,4 +1,4 @@
-[![Check Links](https://github.com/org/repo/actions/workflows/links.yml/badge.svg)](https://github.com/org/repo/actions/workflows/links.yml)
+[![Check Links](https://github.com/cedric57/Tools/actions/workflows/links.yml/badge.svg)](https://github.com/cedric57/Tools/actions/workflows/links.yml)
 
 # 🛠️ Tools - Collection d'Outils en Ligne
 
