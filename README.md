@@ -1,3 +1,5 @@
+[![Check Links](https://github.com/org/repo/actions/workflows/links.yml/badge.svg)](https://github.com/org/repo/actions/workflows/links.yml)
+
 # 🛠️ Tools - Collection d'Outils en Ligne
 
 Collection d'outils en ligne gratuits pour développeurs et professionnels.
