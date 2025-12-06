@@ -31,7 +31,7 @@ jobs:
             --root-dir "${{ github.workspace }}/"
             --cache
             --max-cache-age 1d .
-          #args: "--root-dir . --verbose --no-progress --cache --max-cache-age 1d ."
+            --exclude-loopback
           fail: false
 
       - name: Create Issue From File
