@@ -1,0 +1,12 @@
+{
+	"name": "tools-hybrid",
+	"scripts": {
+		"dev": "./start-dev.sh",
+		"dev:simple": "./scripts/start-backend.sh & ./scripts/start-frontend.sh",
+		"dev:backend": "./scripts/start-backend.sh",
+		"dev:frontend": "./scripts/start-frontend.sh",
+		"check:prerequisites": "./scripts/check-prerequisites.sh",
+		"health:check": "./scripts/health-check.sh",
+		"install:all": "concurrently \"cd frontend/marketing && npm install\" \"cd frontend/app && npm install\" \"cd backend && pip install -r requirements.txt\""
+	}
+}

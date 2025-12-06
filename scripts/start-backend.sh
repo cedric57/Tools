@@ -1,6 +1,8 @@
 #!/bin/bash
+# scripts/start-backend.sh - Démarrage technique du backend
 
-echo "🚀 Démarrage du backend Tools avec uv..."
+echo "🔧 Démarrage du backend FastAPI avec uv..."
+cd backend || exit 1
 
 # Vérifier que uv est installé
 if ! command -v uv &> /dev/null; then
@@ -9,10 +11,8 @@ if ! command -v uv &> /dev/null; then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
-# Synchroniser les dépendances
-echo "📦 Synchronisation des dépendances..."
+echo "📦 Installation des dépendances..."
 uv sync
 
-# Lancer l'application
-echo "🔥 Lancement de l'application..."
+echo "🚀 Lancement de FastAPI..."
 uv run uvicorn main:app --host 127.0.0.1 --port 8000 --reload
